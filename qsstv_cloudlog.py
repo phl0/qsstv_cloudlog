@@ -37,6 +37,14 @@ def parse_message_parts(key, value):
         key = 'TIME_ON'
     if key == "mhz":
         key = 'FREQ'
+    if key == "locator":
+        key = 'GRIDSQUARE'
+    if key == "qth":
+        key = 'QTH'
+    if key == "rx":
+        key = 'RST_RCVD'
+    if key == "tx":
+        key = 'RST_SENT'
     tag = "<" + key.upper() + ":" + str(len(value)) + ">" + value + " "
     return tag
 
@@ -57,7 +65,7 @@ def parse_qsstv_message(data, mtype): #, callbacks=None):
         #log.info("%s: %s" % (tmp[0], tmp[1]))
         temp = parse_message_parts(tmp[0], tmp[1])
         #log.info("String %s" % temp)
-        if tmp[0] == 'date' or tmp[0] == 'time' or tmp[0] == 'call' or tmp[0] == 'mhz' or tmp[0] == 'mode':
+        if tmp[0] == 'date' or tmp[0] == 'time' or tmp[0] == 'call' or tmp[0] == 'mhz' or tmp[0] == 'mode' or tmp[0] == 'locator' or tmp[0] == 'qth' or tmp[0] == 'rx' or tmp[0] == 'tx':
             adif_string += temp
     adif_string += "<EOR>"
     log.info("ADIF string: %s" % adif_string)
