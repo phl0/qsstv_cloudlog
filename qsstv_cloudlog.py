@@ -8,6 +8,7 @@ positional arguments:
   url                   URL for CloudLog.
   api_key               CloudLog API key.
   station_id            CloudLog station ID to upload QSO to.
+  tx_offset             TX LO frequency
 optional arguments:
   -h, --help            show this help message and exit
   --verbose             Output debugging information.
@@ -37,6 +38,7 @@ def parse_message_parts(key, value):
         key = 'TIME_ON'
     if key == "mhz":
         key = 'FREQ'
+        value = str(float(value) + float(arguments['tx_offset']))
     if key == "locator":
         key = 'GRIDSQUARE'
     if key == "qth":
@@ -122,6 +124,8 @@ if __name__ == "__main__":
                         help='CloudLog API key.')
     parser.add_argument('station_id', metavar='station_id', type=str,
                         help='CloudLog station ID to upload QSO to.')
+    parser.add_argument('tx_offset', metavar='tx_offset', type=int,
+                        default=0, help='TX LO Frequency to add')
     parser.add_argument('--verbose', action="store_true",
                         help='Output debugging information.')
     arguments = vars(parser.parse_args())
