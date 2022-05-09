@@ -9,6 +9,8 @@ positional arguments:
   api_key               CloudLog API key.
   station_id            CloudLog station ID to upload QSO to.
   tx_offset             TX LO frequency
+  prop_mode             Propagation mode
+  sat_name              Satellite name
 optional arguments:
   -h, --help            show this help message and exit
   --verbose             Output debugging information.
@@ -69,6 +71,10 @@ def parse_qsstv_message(data, mtype): #, callbacks=None):
         #log.info("String %s" % temp)
         if tmp[0] == 'date' or tmp[0] == 'time' or tmp[0] == 'call' or tmp[0] == 'mhz' or tmp[0] == 'mode' or tmp[0] == 'locator' or tmp[0] == 'qth' or tmp[0] == 'rx' or tmp[0] == 'tx':
             adif_string += temp
+    if arguments['prop_mode'] != '':
+        adif_string += parse_message_parts('PROP_MODE', arguments['prop_mode'])
+    if arguments['sat_name'] != '':
+        adif_string += parse_message_parts('SAT_NAME', arguments['sat_name'])
     adif_string += "<EOR>"
     log.info("ADIF string: %s" % adif_string)
     upload_to_cloudlog(arguments['url'], arguments['api_key'], arguments['station_id'], adif_string)
@@ -126,6 +132,10 @@ if __name__ == "__main__":
                         help='CloudLog station ID to upload QSO to.')
     parser.add_argument('tx_offset', metavar='tx_offset', type=int,
                         default=0, help='TX LO Frequency to add')
+    parser.add_argument('prop_mode', metavar='prop_mode', type=str,
+                        help='Propagation mode')
+    parser.add_argument('sat_name', metavar='sat_name', type=str,
+                        help='Satellite name')
     parser.add_argument('--verbose', action="store_true",
                         help='Output debugging information.')
     arguments = vars(parser.parse_args())
